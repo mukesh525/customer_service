@@ -2,6 +2,7 @@ const CustomerService = require("../services/customer-service");
 const UserAuth = require("./middlewares/auth");
 const { PublishMessage } = require("../utils");
 const { SHOPPING_SERVICE } = require("../config");
+const os = require("os");
 
 module.exports = (app, channel) => {
   const service = new CustomerService();
@@ -65,6 +66,8 @@ module.exports = (app, channel) => {
   });
 
   app.get("/whoami", (req, res, next) => {
-    return res.status(200).json({ msg: "/customer : I am Customer Service" });
+    return res
+      .status(200)
+      .json({ msg: "/customer : I am Customer Service", host: os.hostname() });
   });
 };
