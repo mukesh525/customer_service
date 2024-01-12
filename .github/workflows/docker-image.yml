@@ -10,16 +10,20 @@ jobs:
         matrix:
         node-version: [16x]
         # See supported Node. js release schedule at https://nodejs.org/en/about/releases/
-    steps:
-      - ⁠uses: actions/checkout@v3
-      -⁠ ⁠name: Use Node. js ${{matrix.node-version}}
-      ⁠  uses: actions/setup-node@v3 
-        with:
-         node-version: ${{ matrix.node-version }} 
-         cache: 'npm'
-      - run: npm ci 
+
+        
+  steps:
+    - ⁠uses: actions/checkout@v3
+    -⁠ ⁠name: Use Node. js ${{matrix.node-version}}
+      uses: actions/setup-node@v3 
+      with:
+        node-version: ${{ matrix.node-version }} 
+        cache: 'npm'
+   - run: npm ci 
     
-     -⁠ name: Create env file 
+  
+   
+   -⁠ name: Create env file 
        run: |
           touch .env
           echo APP_SECRET=${{secrets.APP_SECRET}} >> .env 
