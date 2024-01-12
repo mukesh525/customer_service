@@ -1,5 +1,0 @@
-name: Deploy on EC2 Staging
-
-on:
-  push: 
-  branches:["main"]
