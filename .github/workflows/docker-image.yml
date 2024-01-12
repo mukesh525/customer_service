@@ -19,10 +19,10 @@ steps:
    run: |
       touch .env
       echo APP_SECRET=${{secrets.APP_SECRET}} >> .env 
-      echo MONGOD_URI=${{ secrets.MONGOD_URI }} >> .env
-      echo MSG_QUEUE_URL=${{ secrets.MSG_QUEUE_URL }} >> .env
-      echo EXCHANGE_NAME=${{secrets. EXCHANGE_NAME }} >> .env
+      echo MONGOD_URI=${{secrets.MONGOD_URI}} >> .env
+      echo MSG_QUEUE_URL=${{secrets.MSG_QUEUE_URL}} >> .env
+      echo EXCHANGE_NAME=${{secrets. EXCHANGE_NAME}} >> .env
       echo PORT=8001 >> .env 
-      cat - env
+      cat - .env
 -  ⁠name: run docker compose file
    run: sudo docker-compose-up --scale customer-ms=5 -d
