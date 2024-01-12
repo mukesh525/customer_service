@@ -1,0 +1,17 @@
+version: "3"
+services:
+  customer-ms:
+    build: .
+    env_file:
+      - ./.env
+  nginx:
+    build:
+      dockerfile: Dockerfile
+      context: ./proxy
+    container_name: nginx  
+    depends_on:
+      - customer-ms
+    ports:
+      - 8001:8001
+
+    
