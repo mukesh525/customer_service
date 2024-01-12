@@ -1,28 +1,32 @@
-name: Deploy on EC2 Staging on:
-push:
-branches: [ "master" ]
-jobs: build:
-runs-on: self-hosted
-strategy: matrix:
-node-version: [16x]
-# See supported Node. js release schedule at https://nodejs.org/en/about/releases/
-steps:
-- ⁠uses: actions/checkout@v3
--⁠ ⁠name: Use Node. js ${{ matrix.node-version ½}
-⁠  uses: actions/setup-node@v3 
-  with:
-   node-version: ${{ matrix.node-version }} 
-   cache: npm'
-- run: npm ci 
+name: Deploy on EC2 Staging 
+on:
+  push:
+  branches: [ "master" ]
 
--⁠ name: Create env file 
-   run: |
-      touch .env
-      echo APP_SECRET=${{secrets.APP_SECRET}} >> .env 
-      echo MONGOD_URI=${{secrets.MONGOD_URI}} >> .env
-      echo MSG_QUEUE_URL=${{secrets.MSG_QUEUE_URL}} >> .env
-      echo EXCHANGE_NAME=${{secrets. EXCHANGE_NAME}} >> .env
-      echo PORT=8001 >> .env 
-      cat - .env
--  ⁠name: run docker compose file
-   run: sudo docker-compose-up --scale customer-ms=5 -d
+jobs: 
+  build:
+    runs-on: self-hosted
+    strategy:
+        matrix:
+        node-version: [16x]
+# See supported Node. js release schedule at https://nodejs.org/en/about/releases/
+  steps:
+    - ⁠uses: actions/checkout@v3
+    -⁠ ⁠name: Use Node. js ${{matrix.node-version}}
+    ⁠  uses: actions/setup-node@v3 
+      with:
+       node-version: ${{ matrix.node-version }} 
+       cache: npm'
+    - run: npm ci 
+    
+    -⁠ name: Create env file 
+       run: |
+          touch .env
+          echo APP_SECRET=${{secrets.APP_SECRET}} >> .env 
+          echo MONGOD_URI=${{secrets.MONGOD_URI}} >> .env
+          echo MSG_QUEUE_URL=${{secrets.MSG_QUEUE_URL}} >> .env
+          echo EXCHANGE_NAME=${{secrets. EXCHANGE_NAME}} >> .env
+          echo PORT=8001 >> .env 
+          cat - .env
+    -  ⁠name: run docker compose file
+       run: sudo docker-compose-up --scale customer-ms=5 -d
