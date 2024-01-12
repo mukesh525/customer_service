@@ -17,7 +17,7 @@ with:
 
 •⁠  ⁠name: Create env file 
    run: |
-     touch •env•
+      touch .env
       echo APP_SECRET=$ff secrets.APP_SECRET } >> •env echo MONGOD_URI=${f secrets.MONGOD_URI }} >> env
       echo MSG_QUEUE_URL=${f secrets.MSG_QUEUE_URL ½} >> env
       echo EXCHANGE_NAME=${f
