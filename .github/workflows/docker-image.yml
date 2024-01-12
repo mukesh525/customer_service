@@ -23,5 +23,5 @@ with:
       echo EXCHANGE_NAME=${f
       secrets. EXCHANGE_NAME ½} > env
       echo PORT=8001 >> env cat - env
-•⁠name: run docker compose file
-run: sudo docker-compose-up --scale customer-ms=5 -d
+•   ⁠name: run docker compose file
+    run: sudo docker-compose-up --scale customer-ms=5 -d
