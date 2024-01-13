@@ -5,7 +5,7 @@ const { SHOPPING_SERVICE } = require("../config");
 const os = require("os");
 
 module.exports = (app, channel, redisClient) => {
-  const service = new CustomerService();
+  const service = new CustomerService(redisClient);
 
   app.post("/signup", async (req, res, next) => {
     try {
@@ -47,7 +47,7 @@ module.exports = (app, channel, redisClient) => {
   app.get("/profile", UserAuth, async (req, res, next) => {
     try {
       const { _id } = req.user;
-      const data = await service.GetProfile({ _id });
+      data = await service.GetProfile({ _id });
       return res.json(data);
     } catch (error) {
       next(error);

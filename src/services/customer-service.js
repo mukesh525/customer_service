@@ -13,7 +13,8 @@ const {
 
 // All Business logic will be here
 class CustomerService {
-  constructor() {
+  constructor(redis) {
+    this.client = redis;
     this.repository = new CustomerRepository();
   }
 
@@ -75,7 +76,12 @@ class CustomerService {
   }
 
   async GetProfile(id) {
-    return this.repository.FindCustomerById({ id });
+    let _id = "PRFILE:" + id._id;
+    let data = await this.getCachedValue(_id);
+    if (data) return data;
+    data = await this.repository.FindCustomerById({ id });
+    this.setCachedValue(_id, data, 60);
+    return data;
   }
 
   async DeleteProfile(userId) {
@@ -85,6 +91,20 @@ class CustomerService {
       data: { userId },
     };
     return { data, payload };
+  }
+
+  async setCachedValue(key, value, ttl) {
+    const valueStr = JSON.stringify(value);
+    if (!this.client) return;
+    this.client.set(key, valueStr);
+    this.client.expire(key, ttl || 3600);
+  }
+
+  async getCachedValue(key) {
+    console.log("getCachedValue", key);
+    if (!this.client) return;
+    let data = await this.client.get(key);
+    return JSON.parse(data);
   }
 }
 
