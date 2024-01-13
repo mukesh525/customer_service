@@ -1,10 +1,21 @@
 version: "3"
 services:
+  redis-ms:
+    image: redis:6.0.7
+    container_name: redis-ms
+    restart: always
+    volumes:
+      - .:/app/redis_data
+    ports:
+      - 6378:6379
+
   customer-ms:
     #container_name: customer-ms
     build: .
     env_file:
       - ./.env
+    depends_on:
+      - "redis-ms"  
 
     
   nginx:
@@ -14,6 +25,7 @@ services:
     container_name: nginx  
     depends_on:
       - customer-ms
+      - "redis-ms"  
     ports:
       - 8001:8001
 

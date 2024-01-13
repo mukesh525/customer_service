@@ -4,6 +4,13 @@ const { databaseConnection } = require("./database");
 const expressApp = require("./express-app");
 const { CreateChannel } = require("./utils");
 const errorHandler = require("./utils/errors");
+const redis = require("redis");
+const client = redis.createClient({
+  socket: {
+    port: 6379,
+    host: "redis-ms",
+  },
+});
 
 const StartServer = async () => {
   const app = express();
@@ -12,9 +19,14 @@ const StartServer = async () => {
 
   const channel = await CreateChannel();
 
-  await expressApp(app, channel);
+  await expressApp(app, channel, client);
 
   errorHandler(app);
+  client.connect();
+  client.on("connect", (err) => {
+    if (err) throw err;
+    else console.log("Redis Connected..!");
+  });
 
   app
     .listen(PORT, () => {
@@ -26,6 +38,7 @@ const StartServer = async () => {
     })
     .on("close", () => {
       channel.close();
+      client.quit();
     });
 };
 

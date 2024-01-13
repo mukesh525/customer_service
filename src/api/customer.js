@@ -4,7 +4,7 @@ const { PublishMessage } = require("../utils");
 const { SHOPPING_SERVICE } = require("../config");
 const os = require("os");
 
-module.exports = (app, channel) => {
+module.exports = (app, channel, redisClient) => {
   const service = new CustomerService();
 
   app.post("/signup", async (req, res, next) => {
@@ -21,6 +21,7 @@ module.exports = (app, channel) => {
     try {
       const { email, password } = req.body;
       const data = await service.SignIn({ email, password });
+
       return res.json(data);
     } catch (error) {
       next(error);
@@ -65,7 +66,10 @@ module.exports = (app, channel) => {
     }
   });
 
-  app.get("/whoami", (req, res, next) => {
+  app.get("/whoami", async (req, res, next) => {
+    await redisClient.set("host", os.hostname());
+    const value = await redisClient.get("host");
+    console.log(value);
     return res
       .status(200)
       .json({ msg: "/customer : I am Customer Service", host: os.hostname() });
