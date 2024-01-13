@@ -101,7 +101,6 @@ class CustomerService {
   }
 
   async getCachedValue(key) {
-    console.log("getCachedValue", key);
     if (!this.client) return;
     let data = await this.client.get(key);
     return JSON.parse(data);
